@@ -1,5 +1,6 @@
-const { products } = require('../../src/data/products');
-const { filterByCategory } = require('../../src/catalog');
+const products = require('../../src/data/products');
+const {
+  filterByCategory}  = require('../../src/catalog');
 
 const ids = (arr) => arr.map((p) => p.id);
 

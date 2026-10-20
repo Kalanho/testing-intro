@@ -1,28 +1,46 @@
-function filterByCategory(products, category) {
-  if (!category || category === 'all') return [...products];
+const filterByCategory = (products, category) => {
+  if (!category || category === 'all') {
+    return products.slice();
+  }
   return products.filter((product) => product.category === category);
-}
+};
 
-function searchProducts(products, query) {
-  const normalizedQuery = query.trim().toLowerCase();
-  if (!normalizedQuery) return [...products];
-  return products.filter((product) => product.name.toLowerCase().includes(normalizedQuery));
-}
-
-function sortProductsByPrice(products, direction = 'asc') {
-  const multiplier = direction === 'desc' ? -1 : 1;
-  return [...products].sort((first, second) => (first.price - second.price) * multiplier);
-}
-
-function getAvailableProducts(products) {
+const getAvailableProducts = (products) => {
   return products.filter((product) => product.stock > 0);
-}
+};
 
-function getProductById(products, id) {
-  return products.find((product) => product.id === id) || null;
-}
+const getProductById = (products, id) => {
+  if (typeof id !== 'number' || Number.isNaN(id)) {
+    return null;
+  }
+  const product = products.find((item) => item.id === id);
+  return product || null;
+};
 
-const catalogApi = { filterByCategory, searchProducts, sortProductsByPrice, getAvailableProducts, getProductById };
+const searchProducts = (products, query) => {
+  const normalized = typeof query === 'string' ? query.trim().toLowerCase() : '';
+  if (!normalized) {
+    return products.slice();
+  }
+  return products.filter((product) =>
+    product.name.toLowerCase().includes(normalized)
+  );
+};
 
-if (typeof module !== 'undefined') module.exports = catalogApi;
-if (typeof window !== 'undefined') window.catalogApi = catalogApi;
+const sortProductsByPrice = (products, direction = 'asc') => {
+  const sorted = products.slice();
+  if (direction === 'desc') {
+    sorted.sort((a, b) => b.price - a.price);
+  } else {
+    sorted.sort((a, b) => a.price - b.price);
+  }
+  return sorted;
+};
+
+module.exports = {
+  filterByCategory,
+  getAvailableProducts,
+  getProductById,
+  searchProducts,
+  sortProductsByPrice,
+};
